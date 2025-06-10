@@ -1,55 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark Mode Website</title>
-    <style>
-        :root {
-            --primary-color: rgb(58, 208, 138);
-            --background-color: #ffffff;
-            --text-color: #000000;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tajweer – Coming Soon</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;700&display=swap" rel="stylesheet">
 
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 80vh;
-        }
+  <style>
+    :root {
+      --primary: #9370DB;
+      --light-purple: #e5dbff;
+      --text: #ffffff;
+    }
 
-        .header {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            background-color: var(--primary-color);
-        }
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: 'Cairo', sans-serif;
+      height: 100%;
+      overflow: hidden;
+      background: radial-gradient(circle at top right, #9370DB, #5e3bb3);
+      color: var(--text);
+    }
 
-        .logo {
-            max-width: 150px;
-            height: auto;
-        }
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
 
-        .content {
-            text-align: center;
-            padding: 20px;
-        }
-    </style>
+    .container {
+      position: relative;
+      z-index: 1;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .logo {
+      width: 150px;
+      margin-bottom: 20px;
+      animation: fadeIn 2s ease forwards;
+      opacity: 0;
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin: 10px 0;
+      animation: slideUp 1s ease 1.5s forwards;
+      opacity: 0;
+    }
+
+    p {
+      font-size: 1.2rem;
+      margin: 5px 0;
+      opacity: 0;
+    }
+
+    .text-arabic {
+      animation: slideUp 1s ease 2s forwards;
+    }
+
+    .text-english {
+      animation: slideUp 1s ease 2.5s forwards;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
 </head>
 <body>
-    <header class="header">
-        <img src="icon.png" alt="Logo" class="logo">
-    </header>
-    <main class="content">
-        <h1>Coming Soon</h1>
-        <p>No worries | ماعندك هم</p>
-        </main>
+
+<canvas id="bg"></canvas>
+
+<div class="container">
+  <img src="icon.png" alt="Tajweer Logo" class="logo" />
+  <h1>Coming Soon</h1>
+  <p class="text-arabic">ريح بالك… كل شي محسوب لك</p>
+  <p class="text-english">Relax… everything’s calculated for you</p>
+</div>
+
+<script>
+  // Simple particles background
+  const canvas = document.getElementById('bg');
+  const ctx = canvas.getContext('2d');
+  let w, h;
+  let particles = [];
+
+  function init() {
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+    particles = Array.from({ length: 100 }, () => ({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      r: Math.random() * 2 + 1,
+      dx: (Math.random() - 0.5) * 0.5,
+      dy: (Math.random() - 0.5) * 0.5,
+    }));
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, w, h);
+    for (let p of particles) {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
+      ctx.fill();
+      p.x += p.dx;
+      p.y += p.dy;
+      if (p.x < 0 || p.x > w) p.dx *= -1;
+      if (p.y < 0 || p.y > h) p.dy *= -1;
+    }
+    requestAnimationFrame(animate);
+  }
+
+  window.addEventListener('resize', init);
+  init();
+  animate();
+</script>
+
 </body>
 </html>
